@@ -1,10 +1,11 @@
+import { DrawLine } from "./components/Map/DrawLine";
 import { ShowMap } from "./components/Map/ShowMap";
 
 export default function Home() {
 	return (
 		<>
-			<p>draw-range-search-map</p>
 			<ShowMap />
+			<DrawLine />
 		</>
 	);
 }
