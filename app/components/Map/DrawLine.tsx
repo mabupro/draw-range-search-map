@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { Button } from "@material-tailwind/react";
 import { LatLng, Point } from "../../features/types/drawLine";
+import { currentLocationProps } from "../../features/types/drawLine";
 
-export const DrawLine = () => {
+export const DrawLine: React.FC<currentLocationProps> = ({
+	currentLocation,
+}) => {
 	const [drawing, setDrawing] = useState(false);
 	const [lines, setLines] = useState<Point[][]>([]);
 	const [positions, setPositions] = useState<(LatLng | LatLng[])[]>([]);
@@ -12,8 +15,8 @@ export const DrawLine = () => {
 	const [currentPosition, setCurrentPosition] = useState<LatLng[]>([]);
 
 	const defaultCenter: LatLng = {
-		lat: 35.681236,
-		lng: 139.767125,
+		lat: currentLocation.lat,
+		lng: currentLocation.lng,
 	};
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {

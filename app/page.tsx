@@ -5,8 +5,8 @@ import { DrawLine } from "./components/Map/DrawLine";
 import KeywordButton from "./components/Parts/KeywordButton";
 import { LocateButton } from "./components/Parts/LocateButton";
 import { Button } from "@material-tailwind/react";
-import CloseIcon from '@mui/icons-material/Close';
-import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
+import CloseIcon from "@mui/icons-material/Close";
+import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
 
 const array: string[] = ["レストラン", "ラーメン", "コーヒー", "コンビニ"];
 
@@ -27,12 +27,12 @@ export default function Home() {
 
 	const toggleDrawMode = () => {
 		setOpen(!open);
-	}
+	};
 
 	return (
 		<>
 			<div className="relative">
-				<ShowMap />
+				<ShowMap currentLocation={currentLocation} />
 				<div className="absolute top-0 right-0">
 					<div className="">
 						<Button
@@ -41,14 +41,12 @@ export default function Home() {
 							className="absolute top-4 right-4 z-10"
 							size="md"
 							placeholder={undefined}
-							onClick={toggleDrawMode} 						>
+							onClick={toggleDrawMode}
+						>
 							{open ? <CloseIcon /> : <EditLocationAltIcon />}
 						</Button>
-
 					</div>
-					{open &&
-						<DrawLine />
-					}
+					{open && <DrawLine currentLocation={currentLocation} />}
 				</div>
 				<div className="absolute top-1/2 right-0 transform -translate-y-1/2 flex flex-col gap-2">
 					<LocateButton onLocate={handleLocationUpdate} />
