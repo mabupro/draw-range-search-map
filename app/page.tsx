@@ -9,9 +9,7 @@ export default function Home() {
 		<>
 			<div className="relative">
 				<ShowMap />
-				<div className="">
-					<DrawLine />
-				</div>
+				<DrawLine />
 				<div className="absolute top-1/2 right-0 flex flex-col gap-2">
 					{array.map((val, index) => (
 						<KeywordButton key={index} keyword={val} index={index} />
