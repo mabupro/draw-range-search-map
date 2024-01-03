@@ -7,6 +7,7 @@ import { LatLng, Point } from "../../features/types/drawLine";
 export const DrawLine = () => {
 	const [drawing, setDrawing] = useState(false);
 	const [lines, setLines] = useState<Point[][]>([]);
+	const [positions, setPositions] = useState<(LatLng | LatLng[])[]>([]);
 	const [currentLine, setCurrentLine] = useState<Point[]>([]);
 	const [currentPosition, setCurrentPosition] = useState<LatLng[]>([]);
 
@@ -26,7 +27,6 @@ export const DrawLine = () => {
 		setCurrentLine((currentLine) => [...currentLine, getMousePosition(e)]);
 		const latLng = mapPointToLatLng(e.clientX, e.clientY, defaultCenter);
 		setCurrentPosition((currentPosition) => [...currentPosition, latLng]);
-		console.log("Current Line:", currentPosition);
 	};
 
 	const handleMouseUp = (): void => {
@@ -34,6 +34,7 @@ export const DrawLine = () => {
 
 		setDrawing(false);
 		setLines((lines) => [...lines, currentLine]);
+		setPositions((positions) => [...positions, currentPosition]);
 		setCurrentLine([]);
 		setCurrentPosition([]);
 	};
@@ -60,6 +61,7 @@ export const DrawLine = () => {
 
 	const submitToLatLng = (): void => {
 		console.log("Sending LatLng...");
+		console.log(positions);
 	};
 
 	const clearLines = (): void => {
