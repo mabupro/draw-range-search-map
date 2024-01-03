@@ -1,35 +1,62 @@
-'use client';
+'use client'
 
 import { useState } from "react";
-import { Point } from "../../features/types/drawLine";
+import { LatLng, Point } from "../../features/types/drawLine";
 
 export const DrawLine = () => {
-    const [drawing, setDrawing] = useState(false);                  // 描画中かどうかを示すフラグ
-    const [lines, setLines] = useState<Point[][]>([]);              // 過去の描かれた線の配列
-    const [currentLine, setCurrentLine] = useState<Point[]>([]);    // 現在描かれている線の座標の配列
+    const [drawing, setDrawing] = useState(false);
+    const [lines, setLines] = useState<Point[][]>([]);
+    const [currentLine, setCurrentLine] = useState<Point[]>([]);
+    const [currentPosition, setCurrentPosition] = useState<LatLng[]>([]);
 
-    // マウスが要素上で押されたときに呼び出される関数
+    const defaultCenter: LatLng = {
+        lat: 35.681236,
+        lng: 139.767125,
+    };
+
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
-        setDrawing(true);     // 描画中フラグを立てる
-        setCurrentLine([{ x: e.clientX, y: e.clientY }]); // 初期の座標を設定
+        setDrawing(true);
+        setCurrentLine([getMousePosition(e)]);
     };
 
-    // マウスが要素上で移動するたびに呼び出される関数
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>): void => {
-        if (!drawing) return; // 描画中でなければ何もしない
+        if (!drawing) return;
 
-        // 現在の座標を配列に追加
-        setCurrentLine(currentLine => [...currentLine, { x: e.clientX, y: e.clientY }]);
+        setCurrentLine(currentLine => [...currentLine, getMousePosition(e)]);
+        const latLng = mapPointToLatLng(e.clientX, e.clientY, defaultCenter);
+        setCurrentPosition((currentPosition) => [...currentPosition, latLng]);
+        console.log('Current Line:', currentPosition);
     };
 
-    // マウスのボタンが離されたときに呼び出される関数
     const handleMouseUp = (): void => {
-        if (!drawing) return; // 描画中でなければ何もしない
+        if (!drawing) return;
 
-        setDrawing(false); // 描画中フラグを解除
-        setLines(lines => [...lines, currentLine]); // 現在の線を過去の線として保存
-        setCurrentLine([]); // 現在の線をリセット
+        setDrawing(false);
+        setLines(lines => [...lines, currentLine]);
+        setCurrentLine([]);
+        setCurrentPosition([]);
     };
+
+    const getMousePosition = (e: React.MouseEvent<HTMLDivElement>): Point => {
+        return { x: e.clientX, y: e.clientY };
+    };
+
+    const clearLines = (): void => {
+        setLines([]);
+        console.log('Lines cleared.');
+    };
+
+    const mapPointToLatLng = (x: number, y: number, defaultCenter: LatLng): LatLng => {
+        const latLng: LatLng = {
+            lat: defaultCenter.lat + ((y - window.innerHeight / 2) / window.innerHeight) * (-0.01),
+            lng: defaultCenter.lng + ((x - window.innerWidth / 2) / window.innerWidth) * 0.02,
+        };
+        return latLng;
+    };
+
+    const submitToLatLng = () => {
+        console.log("Sending LatLng...");
+    }
 
     return (
         <>
@@ -45,7 +72,6 @@ export const DrawLine = () => {
                     onMouseLeave={handleMouseUp}
                     className="w-full h-full fixed top-0 left-0"
                 >
-                    {/* 過去の線を描画 */}
                     {lines.map((line, index) => (
                         <svg key={index} className="absolute top-0 left-0 w-full h-full pointer-events-none">
                             <polyline
@@ -56,7 +82,6 @@ export const DrawLine = () => {
                             />
                         </svg>
                     ))}
-                    {/* 現在の線を描画（描画中のみ） */}
                     {drawing && (
                         <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
                             <polyline
@@ -68,7 +93,20 @@ export const DrawLine = () => {
                         </svg>
                     )}
                 </div>
+
             </div>
+            <button
+                className="absolute top-2.5 right-12 mx-1 px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded"
+                onClick={clearLines}
+            >
+                Clear Lines
+            </button>
+            <button
+                className="absolute top-2.5 right-40 mx-3 px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded"
+                onClick={submitToLatLng}
+            >
+                Submit
+            </button>
         </>
     );
 };
