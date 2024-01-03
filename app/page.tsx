@@ -1,5 +1,5 @@
 import { DrawLine } from "./components/Map/DrawLine";
-// import { ShowMap } from "./components/Map/ShowMap";
+import { ShowMap } from "./components/Map/ShowMap";
 import KeywordButton from "./components/Parts/KeywordButton";
 
 const array: string[] = ["レストラン", "ラーメン", "コーヒー", "コンビニ"];
@@ -7,10 +7,12 @@ const array: string[] = ["レストラン", "ラーメン", "コーヒー", "コ
 export default function Home() {
 	return (
 		<>
-			<div>
-				{/* <ShowMap /> */}
-				<DrawLine />
-				<div className="flex gap-2">
+			<div className="relative">
+				<ShowMap />
+				<div className="">
+					<DrawLine />
+				</div>
+				<div className="absolute top-1/2 right-0 flex flex-col gap-2">
 					{array.map((val, index) => (
 						<KeywordButton key={index} keyword={val} index={index} />
 					))}

@@ -36,7 +36,7 @@ const KeywordButton: React.FC<KeywordButtonProps> = ({ keyword, index }) => {
 			<Button
 				variant="outlined"
 				color="green"
-				className="rounded-full flex items-center gap-2"
+				className="rounded-full flex items-center gap-2 bg-white"
 				placeholder={undefined}
 				size="sm"
 			>
