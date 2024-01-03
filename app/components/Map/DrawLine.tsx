@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { Button } from "@material-tailwind/react";
 import { LatLng, Point } from "../../features/types/drawLine";
 
 export const DrawLine = () => {
@@ -41,11 +42,6 @@ export const DrawLine = () => {
         return { x: e.clientX, y: e.clientY };
     };
 
-    const clearLines = (): void => {
-        setLines([]);
-        console.log('Lines cleared.');
-    };
-
     const mapPointToLatLng = (x: number, y: number, defaultCenter: LatLng): LatLng => {
         const latLng: LatLng = {
             lat: defaultCenter.lat + ((y - window.innerHeight / 2) / window.innerHeight) * (-0.01),
@@ -54,9 +50,14 @@ export const DrawLine = () => {
         return latLng;
     };
 
-    const submitToLatLng = () => {
+    const submitToLatLng = (): void => {
         console.log("Sending LatLng...");
     }
+
+    const clearLines = (): void => {
+        setLines([]);
+        console.log('Lines cleared.');
+    };
 
     return (
         <>
@@ -95,18 +96,31 @@ export const DrawLine = () => {
                 </div>
 
             </div>
-            <button
-                className="absolute top-2.5 right-12 mx-1 px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded"
-                onClick={clearLines}
-            >
-                Clear Lines
-            </button>
-            <button
-                className="absolute top-2.5 right-40 mx-3 px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded"
-                onClick={submitToLatLng}
-            >
-                Submit
-            </button>
+            <div className="flex gap-2 p-2">
+                <Button
+                    variant="gradient"
+                    color="green"
+                    className="flex items-center gap-2 bg-white"
+                    placeholder={undefined}
+                    size="md"
+                    onClick={clearLines}
+                >
+                    線を消す
+                </Button>
+                <Button
+                    variant="gradient"
+                    color="green"
+                    className="flex items-center gap-2 bg-white"
+                    placeholder={undefined}
+                    size="md"
+                    onClick={submitToLatLng}
+                >
+                    決定
+                </Button>
+                <button onClick={submitToLatLng} className="p-2 bg-white">
+                    決定
+                </button>
+            </div>
         </>
     );
 };
