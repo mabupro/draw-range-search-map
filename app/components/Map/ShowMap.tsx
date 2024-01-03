@@ -1,17 +1,20 @@
 "use client";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import { currentLocationProps } from "../../features/types/drawLine";
 
 const apiKey = process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_MAPS_API_KEY;
 
-export const ShowMap = () => {
+export const ShowMap: React.FC<currentLocationProps> = ({
+	currentLocation,
+}) => {
 	const mapStyles = {
 		height: "100vh",
 		width: "100%",
 	};
 
 	const defaultCenter = {
-		lat: 35.681236,
-		lng: 139.767125,
+		lat: currentLocation.lat,
+		lng: currentLocation.lng,
 	};
 
 	return (
