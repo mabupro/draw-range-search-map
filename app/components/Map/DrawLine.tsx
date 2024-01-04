@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@material-tailwind/react";
 import { LatLng, Point } from "../../features/types/drawLine";
 import { currentLocationProps } from "../../features/types/drawLine";
+import { ResutaurantList } from "../Restaurant/RestaurantList";
 
 export const DrawLine: React.FC<currentLocationProps> = ({
 	currentLocation,
@@ -65,6 +66,7 @@ export const DrawLine: React.FC<currentLocationProps> = ({
 	const submitToLatLng = (): void => {
 		console.log("Sending LatLng...");
 		console.log(positions);
+		setPositions([...positions, currentLocation]);
 	};
 
 	const clearLines = (): void => {
@@ -133,6 +135,7 @@ export const DrawLine: React.FC<currentLocationProps> = ({
 					決定
 				</Button>
 			</div>
+			<ResutaurantList positions={positions} />
 		</>
 	);
 };
