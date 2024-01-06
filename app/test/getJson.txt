@@ -1,0 +1,136 @@
+Fetched data: {
+    html_attributions: [], 
+    results: [
+        {
+        business_status: 'OPERATIONAL',
+        geometry: [Object],
+        icon: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png',  
+        icon_background_color: '#7B9EB0',
+        icon_mask_base_uri: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet',    
+        name: '㈱ジール',  
+        opening_hours: [Object],
+        photos: [Array],   
+        place_id: 'ChIJs_MCaFaJGGARfTligEwWwj0',    
+        plus_code: [Object],
+        rating: 4.8,       
+        reference: 'ChIJs_MCaFaJGGARfTligEwWwj0',   
+        scope: 'GOOGLE',   
+        types: [Array],    
+        user_ratings_total: 8,
+        vicinity: 'Chuo City, Nihonbashi,
+            1 Chome−9, 船着場発着'
+        },
+        {
+        business_status: 'OPERATIONAL',
+        geometry: [Object],
+        icon: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png',        
+        icon_background_color: '#FF9E67',
+        icon_mask_base_uri: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet', 
+        name: 'Annoreve',  
+        opening_hours: [Object],
+        photos: [Array],   
+        place_id: 'ChIJbWmF2-aLGGAR_wFEVU-VhZg',    
+        plus_code: [Object],
+        price_level: 2,    
+        rating: 4.3,       
+        reference: 'ChIJbWmF2-aLGGAR_wFEVU-VhZg',   
+        scope: 'GOOGLE',   
+        types: [Array],    
+        user_ratings_total: 22,
+        vicinity: 'Chuo City, Ginza,
+            4 Chome−9−13, Ginza4tower,
+            5F ザ・リュクス'
+        }
+    ],
+    status: 'OK'
+},
+{
+    html_attributions: [], 
+    results: [
+        {
+        business_status: 'OPERATIONAL',
+        geometry: [Object],
+        icon: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png',  
+        icon_background_color: '#7B9EB0',
+        icon_mask_base_uri: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet',    
+        name: '㈱ジール',  
+        opening_hours: [Object],
+        photos: [Array],   
+        place_id: 'ChIJs_MCaFaJGGARfTligEwWwj0',    
+        plus_code: [Object],
+        rating: 4.8,       
+        reference: 'ChIJs_MCaFaJGGARfTligEwWwj0',   
+        scope: 'GOOGLE',   
+        types: [Array],    
+        user_ratings_total: 8,
+        vicinity: 'Chuo City, Nihonbashi,
+            1 Chome−9, 船着場発着'
+        },
+        {
+        business_status: 'OPERATIONAL',
+        geometry: [Object],
+        icon: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png',        
+        icon_background_color: '#FF9E67',
+        icon_mask_base_uri: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet', 
+        name: 'Annoreve',  
+        opening_hours: [Object],
+        photos: [Array],   
+        place_id: 'ChIJbWmF2-aLGGAR_wFEVU-VhZg',    
+        plus_code: [Object],
+        price_level: 2,    
+        rating: 4.3,       
+        reference: 'ChIJbWmF2-aLGGAR_wFEVU-VhZg',   
+        scope: 'GOOGLE',   
+        types: [Array],    
+        user_ratings_total: 22,
+        vicinity: 'Chuo City, Ginza,
+            4 Chome−9−13, Ginza4tower,
+            5F ザ・リュクス'
+        }
+    ],
+    status: 'OK'
+}
+  Fetching nearby restaurants for Asakusa Station...Fetched data: {
+    html_attributions: [], 
+    results: [
+        {
+        business_status: 'OPERATIONAL',
+        geometry: [Object],
+        icon: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png',        
+        icon_background_color: '#FF9E67',
+        icon_mask_base_uri: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet', 
+        name: 'Onikiri',   
+        place_id: 'ChIJb1scD8GOGGARQEhgUJTiF3o',    
+        plus_code: [Object],
+        rating: 0,
+        reference: 'ChIJb1scD8GOGGARQEhgUJTiF3o',   
+        scope: 'GOOGLE',   
+        types: [Array],    
+        user_ratings_total: 0,
+        vicinity: '2 Chome-3-1 Asakusa, Taito City'
+        }
+    ],
+    status: 'OK'
+}
+  {
+    html_attributions: [], 
+    results: [
+        {
+        business_status: 'OPERATIONAL',
+        geometry: [Object],
+        icon: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png',        
+        icon_background_color: '#FF9E67',
+        icon_mask_base_uri: 'https: //maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet', 
+        name: 'Onikiri',   
+        place_id: 'ChIJb1scD8GOGGARQEhgUJTiF3o',    
+        plus_code: [Object],
+        rating: 0,
+        reference: 'ChIJb1scD8GOGGARQEhgUJTiF3o',   
+        scope: 'GOOGLE',   
+        types: [Array],    
+        user_ratings_total: 0,
+        vicinity: '2 Chome-3-1 Asakusa, Taito City'
+        }
+    ],
+    status: 'OK'
+}
