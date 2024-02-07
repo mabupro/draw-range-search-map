@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiKey = process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_MAPS_API_KEY;
+const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY;
 
 const getNearbyRestaurants = async (location: { lat: number; lng: number }) => {
 	const radius = 1000;
