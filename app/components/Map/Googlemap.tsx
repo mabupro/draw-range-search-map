@@ -41,7 +41,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ currentLocation, drawLinePosition
                     const request = {
                         location: { lat: parseFloat(lat.toFixed(6)), lng: parseFloat(lng.toFixed(6)) },
                         radius: 100,
-                        type: "shop",
+                        type: "restaurant",
                     };
                     requestCount++
                     const results = await new Promise<google.maps.places.PlaceResult[]>((resolve) => {
@@ -54,15 +54,17 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ currentLocation, drawLinePosition
                         });
                     });
                     results.forEach(shop => {
-                        if (!newShops.some(existingShop => existingShop.name === shop.name)) {
-                            newShops.push(shop);
-                            const marker = new google.maps.Marker({
-                                position: { lat: shop.geometry.location.lat(), lng: shop.geometry.location.lng() },
-                                map: map,
-                                title: shop.name,
-                            });
+                        if (shop.geometry && shop.geometry.location) {
+                            if (!newShops.some(existingShop => existingShop.name === shop.name)) {
+                                newShops.push(shop);
+                                const marker = new google.maps.Marker({
+                                    position: { lat: shop.geometry.location.lat(), lng: shop.geometry.location.lng() },
+                                    map: map,
+                                    title: shop.name,
+                                });
+                            }
                         }
-                    });
+                    });                    
                 }
                 requestsCompleted++;
                 if (requestsCompleted === drawLinePositions.length) {

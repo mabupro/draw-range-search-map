@@ -54,7 +54,7 @@ export const DrawLine: React.FC<DrawLineProps> = ({ onLatLngSubmit, currentLocat
 				((y - window.innerHeight / 2) / window.innerHeight) * -0.01,
 			lng:
 				defaultCenter.lng +
-				((x - window.innerWidth / 2) / window.innerWidth) * 0.02,
+				((x - window.innerWidth / 2) / window.innerWidth) * 0.01,
 		};
 		return latLng;
 	};

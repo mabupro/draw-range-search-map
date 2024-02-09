@@ -31,20 +31,19 @@ export default function Home() {
 		setOpen(!open)
 	}
 
-	const [drawLinePositions, setDrawLinePositions] = useState<LatLng[]>([])
+	const [drawLinePositions, setDrawLinePositions] = useState<LatLng[][]>([])
 	// 線を引いた座標を保存する
 	const handleLatLngSubmit = (drawLinePositions: any) => {
 		console.log("Received LatLng Data:", drawLinePositions);
-
+	
 		// 配列の中の配列をフィルタリングして抽出
-		const updatedData = drawLinePositions.map((innerArray: any) => {
+		const updatedData: LatLng[][] = drawLinePositions.map((innerArray: any) => {
 			return innerArray.filter((_: any, index: number) => index === 0 || index % 30 === 0);
 		});
-
+	
 		console.log("Filter LatLng Data:", updatedData);
 		setDrawLinePositions(updatedData);
-	}
-
+	}	
 
 	return (
 		<>
