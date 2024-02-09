@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { LatLng } from "../../features/types/drawLine";
+import { LatLng } from "../../types/drawLine";
 
 const apiKey = process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_MAPS_API_KEY;
 

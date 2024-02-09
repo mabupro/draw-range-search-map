@@ -1,24 +1,20 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@material-tailwind/react";
-import { LatLng, Point } from "../../features/types/drawLine";
-import { currentLocationProps } from "../../features/types/drawLine";
-import { ResutaurantList } from "../Restaurant/RestaurantList";
+import { LatLng, Point } from "../../types/drawLine";
 
-export const DrawLine: React.FC<currentLocationProps> = ({
-	currentLocation,
-}) => {
+type DrawLineProps = {
+	onLatLngSubmit: (drawLinePositions: any) => void;
+	currentLocation: LatLng;
+};
+
+export const DrawLine: React.FC<DrawLineProps> = ({ onLatLngSubmit, currentLocation }) => {
 	const [drawing, setDrawing] = useState(false);
 	const [lines, setLines] = useState<Point[][]>([]);
 	const [positions, setPositions] = useState<(LatLng | LatLng[])[]>([]);
 	const [currentLine, setCurrentLine] = useState<Point[]>([]);
 	const [currentPosition, setCurrentPosition] = useState<LatLng[]>([]);
-
-	const defaultCenter: LatLng = {
-		lat: currentLocation.lat,
-		lng: currentLocation.lng,
-	};
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
 		setDrawing(true);
@@ -29,7 +25,7 @@ export const DrawLine: React.FC<currentLocationProps> = ({
 		if (!drawing) return;
 
 		setCurrentLine((currentLine) => [...currentLine, getMousePosition(e)]);
-		const latLng = mapPointToLatLng(e.clientX, e.clientY, defaultCenter);
+		const latLng = mapPointToLatLng(e.clientX, e.clientY, currentLocation);
 		setCurrentPosition((currentPosition) => [...currentPosition, latLng]);
 	};
 
@@ -65,13 +61,16 @@ export const DrawLine: React.FC<currentLocationProps> = ({
 
 	const submitToLatLng = (): void => {
 		console.log("Sending LatLng...");
-		console.log(positions);
-		setPositions([...positions, currentLocation]);
+		const updatedPositions = [...positions, ...currentPosition.filter((_, index) => index % 30 === 0)];
+		setPositions(updatedPositions);
+		console.log(updatedPositions);
+		onLatLngSubmit(updatedPositions);
 	};
 
 	const clearLines = (): void => {
 		setLines([]);
 		console.log("Lines cleared.");
+		onLatLngSubmit([]);
 	};
 
 	return (
@@ -95,7 +94,9 @@ export const DrawLine: React.FC<currentLocationProps> = ({
 								fill="none"
 								stroke="#E60012"
 								strokeWidth="20"
-								points={line.map((point) => `${point.x},${point.y}`).join(" ")}
+								points={line
+									.map((point) => `${point.x},${point.y}`)
+									.join(" ")}
 							/>
 						</svg>
 					))}
@@ -135,7 +136,6 @@ export const DrawLine: React.FC<currentLocationProps> = ({
 					決定
 				</Button>
 			</div>
-			<ResutaurantList positions={positions} />
 		</>
 	);
 };

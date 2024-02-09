@@ -1,6 +1,6 @@
 "use client";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import { currentLocationProps } from "../../features/types/drawLine";
+import { currentLocationProps } from "../../types/drawLine";
 
 // APIKEY
 const apiKey = process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_MAPS_API_KEY;

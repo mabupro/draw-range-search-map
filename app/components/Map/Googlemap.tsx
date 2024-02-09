@@ -1,110 +1,96 @@
-"use client"
+import React, { useEffect, useRef, useState } from "react";
+import { LatLng } from "../../types/drawLine";
 
-import React, { useEffect, useRef, useState } from "react"
+const INITIALIZE_ZOOM = 15;
+const INITIALIZE_MAP_WIDTH = "100%";
+const INITIALIZE_MAP_HEIGHT = "100vh";
 
-const INITIALIZE_LAT = 35.68238
-const INITIALIZE_LNG = 139.76556
-const INITIALIZE_ZOOM = 15
-const INITIALIZE_MAP_WIDTH = "100%"
-const INITIALIZE_MAP_HEIGHT = "100vh"
+type GoogleMapProps = {
+    currentLocation: { lat: number; lng: number };
+    drawLinePositions: LatLng[][];
+}
 
-const GoogleMap: React.FC = () => {
-    const mapRef = useRef<HTMLDivElement>(null)
-    const [map, setMap] = useState<google.maps.Map | null>(null)
-    const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null)
-    const [shops, setShops] = useState<google.maps.places.PlaceResult[]>([])
+const GoogleMap: React.FC<GoogleMapProps> = ({ currentLocation, drawLinePositions }) => {
+    const mapRef = useRef<HTMLDivElement>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [shops, setShops] = useState<google.maps.places.PlaceResult[]>([]);
 
     useEffect(() => {
-        // マップの初期化
-        if (!mapRef.current) return
+        if (!mapRef.current) return;
 
         const initializedMap = new google.maps.Map(mapRef.current, {
-            center: { lat: INITIALIZE_LAT, lng: INITIALIZE_LNG },
+            center: { lat: currentLocation?.lat || 35.68238, lng: currentLocation?.lng || 139.76556 },
             zoom: INITIALIZE_ZOOM,
-        })
+        });
 
-        setMap(initializedMap)
-    }, [])
+        setMap(initializedMap);
+    }, [currentLocation]);
 
     useEffect(() => {
-        // マップ上のクリックイベント
-        if (!map) return
+        if (!map || !drawLinePositions || drawLinePositions.length === 0) return;
 
-        const markers: google.maps.Marker[] = []
+        const searchNearbyPlaces = async (positions: LatLng[][]) => {
+            const newShops: google.maps.places.PlaceResult[] = [];
+            let requestsCompleted = 0;
+            let requestCount = 0;
 
-        map.addListener("click", (event: { latLng: { lat: () => any; lng: () => any } }) => {
-            const latitude = event.latLng.lat()
-            const longitude = event.latLng.lng()
-            setLocation({ lat: latitude, lng: longitude })
-
-            const service = new google.maps.places.PlacesService(map)
-            service.nearbySearch({
-                location: { lat: latitude, lng: longitude },
-                radius: 100,
-                type: "store",
-            }, (results, status) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                    // 結果がnullでないことを確認
-                    if (results) {
-                        setShops(results)
-
-                        // 既存のマーカーをクリア
-                        markers.forEach(marker => marker.setMap(null))
-
-                        // 各場所に新しいマーカーを作成
-                        results.forEach(place => {
+            for (const positionArray of positions) {
+                for (const { lat, lng } of positionArray) {
+                    console.log("Searching for coordinates:", lat, lng);
+                    const service = new google.maps.places.PlacesService(map);
+                    const request = {
+                        location: { lat: parseFloat(lat.toFixed(6)), lng: parseFloat(lng.toFixed(6)) },
+                        radius: 100,
+                        type: "shop",
+                    };
+                    requestCount++
+                    const results = await new Promise<google.maps.places.PlaceResult[]>((resolve) => {
+                        service.nearbySearch(request, (results, status) => {
+                            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                                resolve(results);
+                            } else {
+                                resolve([]);
+                            }
+                        });
+                    });
+                    results.forEach(shop => {
+                        if (!newShops.some(existingShop => existingShop.name === shop.name)) {
+                            newShops.push(shop);
                             const marker = new google.maps.Marker({
-                                position: place.geometry?.location || { lat: 0, lng: 0 },
+                                position: { lat: shop.geometry.location.lat(), lng: shop.geometry.location.lng() },
                                 map: map,
-                                title: place.name,
-                            })
-
-                            marker.addListener("click", () => {
-                                const infoWindow = new google.maps.InfoWindow({
-                                    content: `<div><strong>${place.name}</strong><br>${place.vicinity}</div>`,
-                                })
-                                infoWindow.open(map, marker)
-                            })
-
-                            markers.push(marker)
-                        })
-                    }
+                                title: shop.name,
+                            });
+                        }
+                    });
                 }
-            })
-        })
+                requestsCompleted++;
+                if (requestsCompleted === drawLinePositions.length) {
+                    console.log(requestCount);
+                    setShops(newShops);
+                }
+            }
+        };
 
-    }, [map])
+        searchNearbyPlaces(drawLinePositions);
 
-    if (location) { console.log(`緯度,経度 ${location.lat},${location.lng}`) }
-    if (shops.length > 0) {
-        console.log("近くの店舗:")
-        shops.forEach((shop, index) => {
-            console.log(`${index + 1}. ${shop.name} ${shop.business_status}`)
-        })
-    }
+        return () => {
+            // Clean-up function
+        };
+    }, [map, drawLinePositions]);
+
+    useEffect(() => {
+        if (shops.length > 0) {
+            const shopLogs = shops.map((shop, index) => `${index + 1}. ${shop.name}`).join("\n");
+            console.log("Unique shops:\n", shopLogs);
+        }
+    }, [shops]);
 
     return (
         <div>
             <div ref={mapRef} style={{ width: INITIALIZE_MAP_WIDTH, height: INITIALIZE_MAP_HEIGHT }} />
-            {/* {location && (
-                <div className="mx-5 my-5">
-                    <h2 className="underline text-lg mb-3">位置情報</h2>
-                    <p>緯度: {location.lat}</p>
-                    <p>経度: {location.lng}</p>
-                </div>
-            )}
-            {shops.length > 0 && (
-                <div className="mx-5 mb-5">
-                    <h2 className="underline text-lg mb-3">近くの店舗</h2>
-                    <ul className="list-disc list-inside">
-                        {shops.map((shop, index) => (
-                            <li key={index}>{shop.name}</li>
-                        ))}
-                    </ul>
-                </div>
-            )} */}
         </div>
-    )
-}
+    );
+};
 
-export default GoogleMap
+export default GoogleMap;

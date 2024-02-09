@@ -1,40 +1,56 @@
-"use client";
-import { useState } from "react";
-// import { ShowMap } from "./components/Map/ShowMap";
-import { DrawLine } from "./components/Map/DrawLine";
-import KeywordButton from "./components/Parts/KeywordButton";
-import { LocateButton } from "./components/Parts/LocateButton";
-import { Button } from "@material-tailwind/react";
-import CloseIcon from "@mui/icons-material/Close";
-import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
-import GoogleMap from "./components/Map/Googlemap";
+"use client"
 
-const array: string[] = ["レストラン", "ラーメン", "コーヒー", "コンビニ"];
+import { useState } from "react"
+import { DrawLine } from "./components/Map/DrawLine"
+import KeywordButton from "./components/Parts/KeywordButton"
+import { LocateButton } from "./components/Parts/LocateButton"
+import { Button } from "@material-tailwind/react"
+import CloseIcon from "@mui/icons-material/Close"
+import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt"
+import GoogleMap from "./components/Map/Googlemap"
+import { LatLng } from "./types/drawLine"
+
+const array: string[] = ["レストラン", "ラーメン", "コーヒー", "コンビニ"]
 
 export default function Home() {
 	const [currentLocation, setCurrentLocation] = useState({
-		lat: 36,
-		lng: 139,
-	});
+		lat: 35.681236,
+		lng: 139.767125,
+	})
+
 	const handleLocationUpdate = (currentLocation: {
-		lat: number;
-		lng: number;
+		lat: number
+		lng: number
 	}) => {
-		setCurrentLocation(currentLocation);
-		console.log(currentLocation.lat, currentLocation.lng);
-	};
+		setCurrentLocation(currentLocation)
+		console.log(currentLocation.lat, currentLocation.lng)
+	}
 
-	const [open, setOpen] = useState<boolean>(false);
-
+	const [open, setOpen] = useState<boolean>(false)
 	const toggleDrawMode = () => {
-		setOpen(!open);
-	};
+		setOpen(!open)
+	}
+
+	const [drawLinePositions, setDrawLinePositions] = useState<LatLng[]>([])
+	// 線を引いた座標を保存する
+	const handleLatLngSubmit = (drawLinePositions: any) => {
+		console.log("Received LatLng Data:", drawLinePositions);
+
+		// 配列の中の配列をフィルタリングして抽出
+		const updatedData = drawLinePositions.map((innerArray: any) => {
+			return innerArray.filter((_: any, index: number) => index === 0 || index % 30 === 0);
+		});
+
+		console.log("Filter LatLng Data:", updatedData);
+		setDrawLinePositions(updatedData);
+	}
+
 
 	return (
 		<>
 			<div className="relative">
-				{/* <ShowMap currentLocation={currentLocation} /> */}
-				<GoogleMap />
+				{/* <GoogleMap currentLocation={currentLocation} /> */}
+				<GoogleMap currentLocation={currentLocation} drawLinePositions={drawLinePositions} />
 				<div className="absolute top-0 right-0">
 					<div className="">
 						<Button
@@ -48,7 +64,7 @@ export default function Home() {
 							{open ? <CloseIcon /> : <EditLocationAltIcon />}
 						</Button>
 					</div>
-					{open && <DrawLine currentLocation={currentLocation} />}
+					{open && <DrawLine currentLocation={currentLocation} onLatLngSubmit={handleLatLngSubmit} />}
 				</div>
 				<div className="absolute top-1/2 right-0 transform -translate-y-1/2 flex flex-col gap-2">
 					<LocateButton onLocate={handleLocationUpdate} />
@@ -58,20 +74,5 @@ export default function Home() {
 				</div>
 			</div>
 		</>
-	);
+	)
 }
-
-// import { RestaurantList } from "@/app/test/RestaurantList";
-// import { Suspense } from "react";
-
-// const Home = () => {
-// 	return (
-// 		<div>
-// 			<Suspense fallback={<div>Loading...</div>}>
-// 				<RestaurantList />
-// 			</Suspense>
-// 		</div>
-// 	);
-// };
-
-// export default Home;
