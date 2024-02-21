@@ -7,44 +7,50 @@ import FreeBreakfastOutlinedIcon from "@mui/icons-material/FreeBreakfastOutlined
 import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
 
 interface KeywordButtonProps {
-	keyword: string;
-	index: number;
+    keyword: string;
+    type: string;
+    onToggleType: (type: string) => void;
 }
 
-const KeywordButton: React.FC<KeywordButtonProps> = ({ keyword, index }) => {
-	let selectedIcon;
-	if (index === 0) {
-		selectedIcon = (
-			<RestaurantOutlinedIcon fontSize="small" className="text-green-500" />
-		);
-	} else if (index === 1) {
-		selectedIcon = (
-			<RamenDiningOutlinedIcon fontSize="small" className="text-green-500" />
-		);
-	} else if (index === 2) {
-		selectedIcon = (
-			<FreeBreakfastOutlinedIcon fontSize="small" className="text-green-500" />
-		);
-	} else {
-		selectedIcon = (
-			<StoreOutlinedIcon fontSize="small" className="text-green-500" />
-		);
-	}
+export const KeywordButton: React.FC<KeywordButtonProps> = ({ keyword, type, onToggleType }) => {
+    let selectedIcon;
+    if (type === "restaurant") {
+        selectedIcon = (
+            <RestaurantOutlinedIcon fontSize="small" className="text-green-500" />
+        );
+    } else if (type === "ramen") {
+        selectedIcon = (
+            <RamenDiningOutlinedIcon fontSize="small" className="text-green-500" />
+        );
+    } else if (type === "coffee") {
+        selectedIcon = (
+            <FreeBreakfastOutlinedIcon fontSize="small" className="text-green-500" />
+        );
+    } else {
+        selectedIcon = (
+            <StoreOutlinedIcon fontSize="small" className="text-green-500" />
+        );
+    }
 
-	return (
-		<div>
-			<Button
-				variant="outlined"
-				color="green"
-				className="rounded-full flex items-center gap-2 bg-white"
-				placeholder={undefined}
-				size="sm"
-			>
-				{selectedIcon}
-				{keyword}
-			</Button>
-		</div>
-	);
+    const handleClick = () => {
+        onToggleType(type);
+    };
+
+    return (
+        <div>
+            <Button
+                variant="outlined"
+                color="green"
+                className="rounded-full flex items-center gap-2 bg-white"
+                placeholder={undefined}
+                size="sm"
+                onClick={handleClick}
+            >
+                {selectedIcon}
+                {keyword}
+            </Button>
+        </div>
+    );
 };
 
 export default KeywordButton;

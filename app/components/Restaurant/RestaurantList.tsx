@@ -1,65 +1,85 @@
-"use client";
-import { useEffect, useState } from "react";
-import { LatLng } from "../../types/drawLine";
-
-const apiKey = process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_MAPS_API_KEY;
+import React, { useState, useEffect } from 'react';
+import { List, ListItem, Badge } from "@material-tailwind/react";
+import { FaAngleUp, FaAngleDown } from 'react-icons/fa';
+import { RestaurantDetail } from './RestaurantDitial';
 
 type RestaurantListProps = {
-	positions: (LatLng | LatLng[])[];
-};
+    shops: google.maps.places.PlaceResult[];
+}
 
-type Restaurant = {
-	name: string;
-	place_id: string;
-};
+export const RestaurantList: React.FC<RestaurantListProps> = ({ shops }) => {
+    const [isListOpen, setIsListOpen] = useState(false);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<google.maps.places.PlaceResult | null>(null);
+    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
-export const ResutaurantList: React.FC<RestaurantListProps> = ({
-	positions,
-}) => {
-	const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const toggleList = () => {
+        setIsListOpen(!isListOpen);
+    };
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				// Google Places API のエンドポイント
-				const apiUrl =
-					"https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+    const handleSelectIndex = (index: number) => {
+        setSelectedIndex(index);
+    };
 
-				// API キーと位置情報を設定
-				const location: string[] = positions.map(
-					(position: any) => `${position.lat},${position.lng}`
-				);
+    const handleRestaurantClick = (index: number) => {
+        setSelectedRestaurant(shops[index]);
+        setSelectedIndex(index);
+    }
 
-				// クエリパラメータを構築
-				const queryParams: string[] = location.map(
-					(loc) => `location=${loc}&radius=1000&type=restaurant&key=${apiKey}`
-				);
+    const handleCloseDetail = () => {
+        setSelectedRestaurant(null);
+        setSelectedIndex(-1);
+    };
 
-				// API リクエストを送信
-				const response = await fetch(`${apiUrl}?${queryParams}`);
-				const data = await response.json();
+    useEffect(() => {
+        if (selectedIndex >= 0 && selectedIndex < shops.length) {
+            setSelectedRestaurant(shops[selectedIndex]);
+        }
+    }, [selectedIndex, shops]);
 
-				// レスポンスからレストランのリストを取得
-				const restaurantList = data.results;
-				setRestaurants(restaurantList);
-				console.log(positions);
-			} catch (error) {
-				console.error("Error fetching data:", error);
-			}
-		};
-
-		// fetchData 関数を実行
-		fetchData();
-	}, [positions]);
-
-	return (
-		<div>
-			<h1>Nearby Restaurants</h1>
-			<ul>
-				{restaurants.map((restaurant) => (
-					<li key={restaurant.place_id}>{restaurant.name}</li>
-				))}
-			</ul>
-		</div>
-	);
+    return (
+        <div className={`fixed bottom-0 w-full md:left-0 md:w-1/2 bg-white p-4 shadow-lg overflow-hidden rounded-lg ${isListOpen ? 'h-screen' : 'h-16'}`}>
+            <div className="w-full flex justify-center items-center">
+                <button
+                    className="w-1/3 bg-orange-500 text-white p-2 m-2 rounded-full flex justify-center items-center  hover:opacity-75"
+                    onClick={toggleList}
+                >
+                    {isListOpen ? <FaAngleDown /> : <FaAngleUp />}
+                    {shops.length > 0 && (
+                        <Badge color="red" className="ml-2">
+                            {shops.length}
+                        </Badge>
+                    )}
+                </button>
+            </div>
+            {isListOpen && (
+                <div className="overflow-auto h-full m-2">
+                    <List className='my-5' placeholder={undefined}>
+                        {shops.map((shop, index) => (
+                            <ListItem
+                                key={index}
+                                onClick={() => handleRestaurantClick(index)}
+                                className="flex items-center max-h-42" placeholder={undefined}                            >
+                                {shop.photos && shop.photos.length > 0 && <img src={shop.photos[0].getUrl()} alt={shop.name} style={{ width: '30%', margin: '10px' }} />}
+                                <div>
+                                    <p className="font-bold">{shop.name}</p>
+                                    <p className="text-sm">{shop.vicinity}</p>
+                                </div>
+                            </ListItem>
+                        ))}
+                    </List>
+                    {selectedRestaurant && (
+                        <div className="absolute top-0 left-0 w-full h-full bg-white p-4">
+                            <RestaurantDetail
+                                restaurant={selectedRestaurant}
+                                selectedIndex={selectedIndex}
+                                onClose={handleCloseDetail}
+                                restaurants={[]}
+                                onSelect={handleSelectIndex}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
 };
